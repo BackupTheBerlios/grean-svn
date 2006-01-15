@@ -1,0 +1,9 @@
+Editing bookmark<br />
+
+<%= start_form_tag :action => 'update', :id => @bookmark %>
+  <%= render :partial => 'form' %>
+  <%= submit_tag 'Edit' %>
+<%= end_form_tag %>
+<br />
+<%= link_to 'Show', :action => 'show', :id => @bookmark %> |
+<%= link_to 'Back', :action => 'list', :id => nil %>

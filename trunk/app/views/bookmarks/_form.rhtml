@@ -1,0 +1,11 @@
+<%= error_messages_for 'bookmark' %>
+<!--[form:bookmark]-->
+<p><label for="bookmark_url">URL</label><br/>
+<%= text_field 'bookmark', 'url', 'size' => 100 %></p>
+
+<p><label for="bookmark_title">Title</label><br/>
+<%= text_field 'bookmark', 'title', 'size' => 100 %></p>
+
+<p><label for="bookmark_notes">Notes</label><br/>
+<%= text_area 'bookmark', 'notes', 'cols' => 100, 'rows' => 5 %></p>
+<!--[eoform:bookmark]-->

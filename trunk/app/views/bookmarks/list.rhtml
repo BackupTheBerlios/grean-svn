@@ -1,0 +1,19 @@
+<dl class="posts">
+<% for bookmark in @bookmarks -%>
+<dt class="post">
+  <a href="<%= bookmark.url %>"><%=h bookmark.title %></a><br />
+  <dd>
+  <%= link_to '[E]', :action => 'edit', :id => bookmark -%>
+ <%= link_to '[D]', { :action => 'destroy', :id => bookmark }, :confirm => 'Are you sure?' %>
+  </dd>
+  <%- if bookmark.notes -%>
+  <dd><%= notes_html(bookmark.notes) %></dd>
+  <%- end -%>
+  <br />
+</dt>
+<% end -%>
+</dl>
+<%= link_to 'Previous page', { :page => @bookmark_pages.current.previous } if @bookmark_pages.current.previous %> | 
+<%= link_to 'Next page',     { :page => @bookmark_pages.current.next     } if @bookmark_pages.current.next    -%>
+<br />
+<%= link_to 'New bookmark', :action => 'new' %>
