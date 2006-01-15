@@ -1,0 +1,20 @@
+# Use Unicode Strings
+# http://wiki.rubyonrails.com/rails/pages/HowToUseUnicodeStrings
+login: &login
+  adapter: postgresql
+  encoding: unicode
+  username: postgres
+  password: 
+  host: localhost
+
+development:
+  database: grean_development
+  <<: *login
+
+test:
+  database: grean_test
+  <<: *login
+
+production:
+  database: grean_production
+  <<: *login
