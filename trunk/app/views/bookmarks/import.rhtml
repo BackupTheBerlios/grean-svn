@@ -1,0 +1,9 @@
+Bookmark import result<br />
+<ol>
+<% for bm in @bookmarks -%>
+<li><%=h bm.created_at.to_date %> <%= link_to h(bm.title), bm.url %> Tag:<%=h bm.tags_str %></li>
+<% end -%>
+</ol>
+<br />
+<%= link_to 'Configuration', :action => 'config' %><br />
+<%= link_to 'Back', :action => 'list' %><br />

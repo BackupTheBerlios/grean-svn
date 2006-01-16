@@ -1,0 +1,15 @@
+Configuration<br />
+<br />
+Import<br />
+<%= start_form_tag :action => 'import' %>
+  <%- select_option = [['hatena_bookmark', '?B'], ['delicious', 'del.icio.us']].collect { |o| %Q(<option value="#{o[0]}">#{o[1]}</option>) }.join -%>
+  Service <%= select_tag 'service', select_option %><br />
+  <%= check_box_tag 'overwrite', 'true', true %> Overwrite<br />
+  user id<br />
+  <%= password_field_tag 'user_id', nil, 'size' => '20' %><br />
+  password<br />
+  <%= password_field_tag 'password', nil, 'size' => '20' %><br />
+  <%= submit_tag 'Import' %>
+<%= end_form_tag %>
+<br />
+<%= link_to 'Back', :action => 'list' %><br />

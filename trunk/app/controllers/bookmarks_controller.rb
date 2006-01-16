@@ -41,4 +41,17 @@ class BookmarksController < ApplicationController
     Bookmark.find(params[:id]).destroy
     redirect_to :action => 'list'
   end
+
+  def config
+  end
+
+  def import
+    options = {
+      :service   => params[:service],
+      :overwrite => params[:overwrite],
+      :user_id   => params[:user_id],
+      :password  => params[:password],
+    }
+    @bookmarks = Bookmark.import(options)
+  end
 end
