@@ -7,6 +7,9 @@ Show bookmark<br />
   <dt>Title</dt>
   <dd><%=h @bookmark.title %></dd>
   <br />
+  <dt>Tag</dt>
+  <dd><%= tags_html(@bookmark.tags) %></dd>
+  <br />
   <dt>Notes</dt>
   <dd><%= notes_html(@bookmark.notes) %></dd>
   <br />

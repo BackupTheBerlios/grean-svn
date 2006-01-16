@@ -15,7 +15,7 @@ class BookmarksController < ApplicationController
 
   def create
     @bookmark = Bookmark.new(params[:bookmark])
-    if @bookmark.save
+    if @bookmark.save && @bookmark.set_tags(params[:bookmark][:tags_str])
       flash[:notice] = 'Bookmark was successfully created.'
       redirect_to :action => 'list'
     else
@@ -29,7 +29,7 @@ class BookmarksController < ApplicationController
 
   def update
     @bookmark = Bookmark.find(params[:id])
-    if @bookmark.update_attributes(params[:bookmark])
+    if @bookmark.update_attributes(params[:bookmark]) && @bookmark.set_tags(params[:bookmark][:tags_str])
       flash[:notice] = 'Bookmark was successfully updated.'
       redirect_to :action => 'show', :id => @bookmark
     else

@@ -57,3 +57,4 @@ end
 # end
 
 # Include your application configuration below
+require_gem 'acts_as_taggable'

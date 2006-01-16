@@ -6,6 +6,9 @@
   <%= link_to '[E]', :action => 'edit', :id => bookmark -%>
  <%= link_to '[D]', { :action => 'destroy', :id => bookmark }, :confirm => 'Are you sure?' %>
   </dd>
+  <%- if bookmark.tags_count > 0 -%>
+  <dd><%= tags_html(bookmark.tags) %></dd>
+  <%- end -%>
   <%- if bookmark.notes -%>
   <dd><%= notes_html(bookmark.notes) %></dd>
   <%- end -%>
