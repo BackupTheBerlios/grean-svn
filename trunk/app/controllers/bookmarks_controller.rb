@@ -1,6 +1,30 @@
 class BookmarksController < ApplicationController
   def list
-    @bookmark_pages, @bookmarks = paginate :bookmarks, :per_page => 3, :order_by => 'created_at DESC, id DESC'
+    @bookmark_pages, @bookmarks =
+      paginate :bookmarks,
+               :per_page => 3,
+               :order_by => 'created_at DESC, id DESC'
+  end
+
+  def tag
+    if params[:name].nil?
+      redirect_to :action => 'list'
+      return
+    end
+
+    tag = Tag.find_by_name(CGI.unescape(params[:name]))
+    if tag.nil?
+      redirect_to :action => 'list'
+      return
+    end
+
+    @bookmark_pages, @bookmarks =
+      paginate :bookmarks,
+               :per_page   => 3,
+               :order_by   => 'created_at DESC, id DESC',
+               :conditions => ['tags_bookmarks.tag_id = ?', tag.id],
+               :joins      => 'LEFT JOIN tags_bookmarks ON bookmarks.id = tags_bookmarks.bookmark_id'
+    render :action => 'list'
   end
 
   def show

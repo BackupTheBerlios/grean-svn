@@ -1,5 +1,6 @@
 class Bookmark < ActiveRecord::Base
   acts_as_taggable
+  before_destroy :destroy_tags
 
   before_save :strip
 
@@ -16,11 +17,19 @@ class Bookmark < ActiveRecord::Base
     self.tags.collect { |t| t.name }.join(' / ')
   end
   def set_tags(param_tags)
-    tags_array = param_tags.split('/').collect{ |t| t.strip }.delete_if{ |t| t.length == 0 }
-    self.tag(tags_array, :clear => true)
+    new_tags = param_tags.split('/').collect{ |t| t.strip }.delete_if{ |t| t.length == 0 }
+    delete_tag_names = self.tag_names - new_tags
+    self.tag(new_tags, :clear => true)
+    Tag.destroy_by_names_if_zero_tagged(delete_tag_names)
   end
 
   protected
+  def destroy_tags
+    delete_tag_names = self.tag_names
+    self.tag(nil, :clear => true)
+    Tag.destroy_by_names_if_zero_tagged(delete_tag_names)
+  end
+
   # 先頭と末尾の空白文字を削除
   def strip
     self.url.strip!   if self.url

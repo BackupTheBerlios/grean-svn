@@ -7,7 +7,7 @@ module BookmarksHelper
   # tags
   def tags_html(tags)
     tags.collect! do |tag|
-      h(tag.name)
+      link_to h(tag.name), :action => 'tag', :name => u(tag.name)
     end
     tags.join(' ')
   end
