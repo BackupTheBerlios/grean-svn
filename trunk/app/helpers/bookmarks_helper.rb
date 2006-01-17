@@ -17,4 +17,10 @@ module BookmarksHelper
     url, domain = HatenaBookmark.entrylist_url_and_domain(url)
     %|<a href="#{url}" title="?B hot entry">#{domain}</a>|
   end
+
+  # ?B entry
+  def hatena_bookmark_entry_link(url)
+    entry_url = HatenaBookmark.entry_url(url)
+    %|<a href="#{entry_url}" title="?B entry">?B</a>|
+  end
 end

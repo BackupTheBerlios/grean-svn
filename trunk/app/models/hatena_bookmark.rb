@@ -21,6 +21,11 @@ class HatenaBookmark
     [entrylist_url, domain]
   end
 
+  # エントリー詳細ページのURL
+  def self.entry_url(url)
+    'http://b.hatena.ne.jp/entry/' + url.gsub(/#/, '%23')
+  end
+
   # AtomAPI WSSE認証 HTTP X-WSSEヘッダを作成
   protected
   def self.wsse_header(user_id, password)
