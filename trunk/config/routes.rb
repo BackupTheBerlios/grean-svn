@@ -3,8 +3,8 @@ ActionController::Routing::Routes.draw do |map|
   # The priority is based upon order of creation: first created -> highest priority.
 
   # bookmarks
-  map.connect 'bookmarks/tag/:name', :controller => 'bookmarks', :action => 'tag'
-  map.connect 'bookmarks/:action/:id', :controller => 'bookmarks', :action => 'list'
+  map.connect 'tag/:name', :controller => 'bookmarks', :action => 'tag'
+  map.connect ':action/:id', :controller => 'bookmarks', :action => 'list'
 
   # Here's a sample route:
   # map.connect 'products/:id', :controller => 'catalog', :action => 'view'
