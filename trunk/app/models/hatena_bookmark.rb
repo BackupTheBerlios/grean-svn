@@ -1,3 +1,5 @@
+require 'uri'
+require 'cgi'
 require 'xmlrpc/client'
 require 'time'
 require 'digest/sha1'
@@ -5,6 +7,20 @@ require 'net/http'
 Net::HTTP.version_1_2
 
 class HatenaBookmark
+  # 注目エントリーのURLとドメイン名
+  def self.entrylist_url_and_domain(url)
+    entrylist_url = 'http://b.hatena.ne.jp/entrylist?url='
+    if md = %r<^(http://d\.hatena\.ne\.jp/([^/]+)/)>.match(url)
+      entrylist_url += CGI.escape(md[1])
+      domain         = "d:id:#{md[2]}"
+    else
+      url_array = URI.split(url).fill(nil, 4) # path以降の情報は使用しない
+      entrylist_url += CGI.escape(URI::Generic.build(url_array).to_s + '/')
+      domain         = url_array[3] ? "#{url_array[2]}:#{url_array[3]}" : url_array[2]
+    end
+    [entrylist_url, domain]
+  end
+
   # AtomAPI WSSE認証 HTTP X-WSSEヘッダを作成
   protected
   def self.wsse_header(user_id, password)

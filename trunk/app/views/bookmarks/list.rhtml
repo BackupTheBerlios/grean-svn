@@ -3,7 +3,8 @@
 <dt class="post">
   <a href="<%= bookmark.url %>"><%=h bookmark.title %></a><br />
   <dd>
-  <%= link_to '[E]', :action => 'edit', :id => bookmark -%>
+  <%= hatena_bookmark_entrylist_link(bookmark.url) -%> |
+ <%= link_to '[E]', :action => 'edit', :id => bookmark -%>
  <%= link_to '[D]', { :action => 'destroy', :id => bookmark }, :confirm => 'Are you sure?' %>
   </dd>
   <%- if bookmark.tags_count > 0 -%>
