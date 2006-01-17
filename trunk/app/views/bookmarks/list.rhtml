@@ -19,4 +19,5 @@
 <%= link_to 'Previous page', { :page => @bookmark_pages.current.previous } if @bookmark_pages.current.previous %> | 
 <%= link_to 'Next page',     { :page => @bookmark_pages.current.next     } if @bookmark_pages.current.next    -%>
 <br />
-<%= link_to 'New bookmark', :action => 'new' %>
+<%= link_to 'New bookmark', :action => 'new' %><br />
+<%= link_to 'Configuration', :action => 'config' %>

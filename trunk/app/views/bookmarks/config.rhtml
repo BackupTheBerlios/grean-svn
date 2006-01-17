@@ -1,5 +1,6 @@
 Configuration<br />
 <br />
+<hr />
 Import<br />
 <%= start_form_tag :action => 'import' %>
   <%- select_option = [['hatena_bookmark', '?B'], ['delicious', 'del.icio.us']].collect { |o| %Q(<option value="#{o[0]}">#{o[1]}</option>) }.join -%>
@@ -11,5 +12,10 @@ Import<br />
   <%= password_field_tag 'password', nil, 'size' => '20' %><br />
   <%= submit_tag 'Import' %>
 <%= end_form_tag %>
+<br />
+<br />
+<hr />
+<%= link_to 'Destroy all bookmarks', :action => 'destroy_all' %><br />
+<br />
 <br />
 <%= link_to 'Back', :action => 'list' %><br />

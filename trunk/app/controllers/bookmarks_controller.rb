@@ -54,4 +54,12 @@ class BookmarksController < ApplicationController
     }
     @bookmarks = Bookmark.import(options)
   end
+
+  def destroy_all
+    Bookmark.destroy_all
+    Tag.destroy_all
+
+    flash[:notice] = 'All bookmarks destroyed.'
+    redirect_to :action => 'config'
+  end
 end
