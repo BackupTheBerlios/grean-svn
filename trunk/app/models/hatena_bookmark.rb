@@ -35,6 +35,7 @@ class HatenaBookmark
       while has_next
         header = { 'User-Agent' => "Ruby/#{VERSION}" }.update(wsse_header(user_id, password))
         response = http.get('/atom/feed?of=' + offset.to_s, header)
+        raise "HatenaBookmark.get_all_bookmarks HTTP #{response.code} #{response.message}" unless response.code == '200'
 
         root = REXML::Document.new(response.body).elements['feed']
 

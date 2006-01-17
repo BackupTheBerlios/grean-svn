@@ -10,6 +10,7 @@ class Delicious
       req = Net::HTTP::Get.new('/api/posts/all', { 'User-Agent' => "Ruby/#{VERSION}" })
       req.basic_auth(user_id, password)
       response = http.request(req)
+      raise "Delicious.get_all_bookmarks HTTP #{response.code} #{response.message}" unless response.code == '200'
       xml = response.body
     end
 
