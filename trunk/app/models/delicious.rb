@@ -4,6 +4,10 @@ require 'net/http'
 Net::HTTP.version_1_2
 
 class Delicious
+  def self.history_url(url)
+    'http://del.icio.us/url/' + Digest::MD5.hexdigest(url)
+  end
+
   def self.get_all_bookmarks(user_id, password)
     xml = nil
     Net::HTTP.start('del.icio.us') do |http|

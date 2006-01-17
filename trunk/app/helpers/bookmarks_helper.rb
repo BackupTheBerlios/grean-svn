@@ -23,4 +23,10 @@ module BookmarksHelper
     entry_url = HatenaBookmark.entry_url(url)
     %|<a href="#{entry_url}" title="?B entry">?B</a>|
   end
+
+  # del.icio.us history
+  def delicious_history_link(url)
+    history_url = Delicious.history_url(url)
+    %|<a href="#{history_url}" title ="del.icio.us history">del.icio.us</a>|
+  end
 end
