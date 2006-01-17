@@ -74,6 +74,11 @@ class Bookmark < ActiveRecord::Base
         if options[:overwrite]
           bookmark = Bookmark.find_by_url(b[:url])
         else
+          if b.has_key? :hb_eid
+            bookmark = Bookmark.find_by_url(b[:url])
+            bookmark.hb_eid = b[:hb_eid]
+            bookmark.save!
+          end
           next
         end
       else
