@@ -1,30 +1,23 @@
 class BookmarksController < ApplicationController
   def list
+    set_tags # CGI.unescape params[:tags]
+
+   # ************************************ tag filter multi
+
+    conditions = nil
+    joins      = nil
+    # tag filter
+    if params[:tags]
+      conditions = [(['tags.name = ?'] * params[:tags].length).join(' AND ')] + params[:tags]
+      joins      = 'LEFT JOIN tags_bookmarks ON bookmarks.id = tags_bookmarks.bookmark_id left join tags on tags_bookmarks.tag_id = tags.id'
+    end
+
     @bookmark_pages, @bookmarks =
       paginate :bookmarks,
                :per_page => 3,
-               :order_by => 'created_at DESC, id DESC'
-  end
-
-  def tag
-    if params[:name].nil?
-      redirect_to :action => 'list'
-      return
-    end
-
-    tag = Tag.find_by_name(CGI.unescape(params[:name]))
-    if tag.nil?
-      redirect_to :action => 'list'
-      return
-    end
-
-    @bookmark_pages, @bookmarks =
-      paginate :bookmarks,
-               :per_page   => 3,
-               :order_by   => 'created_at DESC, id DESC',
-               :conditions => ['tags_bookmarks.tag_id = ?', tag.id],
-               :joins      => 'LEFT JOIN tags_bookmarks ON bookmarks.id = tags_bookmarks.bookmark_id'
-    render :action => 'list'
+               :order_by => 'bookmarks.created_at DESC, bookmarks.id DESC',
+               :conditions => conditions,
+               :joins      => joins
   end
 
   def show
@@ -85,5 +78,14 @@ class BookmarksController < ApplicationController
 
     flash[:notice] = 'All bookmarks destroyed.'
     redirect_to :action => 'config'
+  end
+
+  protected
+  def set_tags
+    if params[:tags].nil? || params[:tags].length == 0
+      params[:tags] = nil
+    else
+      params[:tags].collect! { |t| CGI.unescape(t) }
+    end
   end
 end

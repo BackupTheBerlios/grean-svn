@@ -6,11 +6,13 @@
   <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
   <%= stylesheet_link_tag 'scaffold' %>
   <%= stylesheet_link_tag 'base' %>
-  <%= stylesheet_link_tag 'bookmarks' %>
 </head>
 <body>
 <% if flash[:notice] -%>
 <p style="color: green"><%= flash[:notice] %></p>
+<% end -%>
+<% if params[:tags] -%>
+<p>Tag: <%=h params[:tags].join(' ') %> | <%= link_to 'Clear', :action => 'list', :tags => nil %></p>
 <% end -%>
 <%= @content_for_layout %>
 </body>

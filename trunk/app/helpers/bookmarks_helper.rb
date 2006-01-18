@@ -5,11 +5,20 @@ module BookmarksHelper
   end
 
   # tags
-  def tags_html(tags)
-    tags.collect! do |tag|
-      link_to h(tag.name), :action => 'tag', :name => u(tag.name)
+  def tags_html(tag_names)
+    ue_params_tags = params[:tags] ? params[:tags].collect { |t| u(t) } : nil
+    tag_names.collect! do |tag|
+      if ue_params_tags
+        if params[:tags].include? tag
+          h(tag)
+        else
+          link_to h(tag), :action => 'list', :tags => ue_params_tags + [u(tag)]
+        end
+      else
+        link_to h(tag), :action => 'list', :tags => u(tag)
+      end
     end
-    tags.join(' ')
+    tag_names.join(' ')
   end
 
   # ?B hot entry

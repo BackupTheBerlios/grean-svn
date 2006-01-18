@@ -1,6 +1,6 @@
-<dl class="posts">
+<dl class="bookmarks">
 <% for bookmark in @bookmarks -%>
-<dt class="post">
+<dt class="bookmark">
   <a href="<%= bookmark.url %>"><%=h bookmark.title %></a><br />
   <dd>
   <%= hatena_bookmark_hot_entry_link(bookmark.url) %> |
@@ -10,7 +10,7 @@
  <%= link_to '[D]', { :action => 'destroy', :id => bookmark }, :confirm => 'Are you sure?' %>
   </dd>
   <%- if bookmark.tags_count > 0 -%>
-  <dd><%= tags_html(bookmark.tags) %></dd>
+  <dd><%= tags_html(bookmark.tag_names) %></dd>
   <%- end -%>
   <%- if bookmark.notes -%>
   <dd><%= notes_html(bookmark.notes) %></dd>
