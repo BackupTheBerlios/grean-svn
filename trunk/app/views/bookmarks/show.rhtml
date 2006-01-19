@@ -2,13 +2,13 @@ Show bookmark<br />
 <br />
 <dl>
   <dt>URL</dt>
-  <dd><a href="<%= @bookmark.url %>"><%= @bookmark.url %></a></dd>
+  <dd><%= link_to(h(@bookmark.title), @bookmark.url) %></dd>
   <br />
   <dt>Title</dt>
   <dd><%=h @bookmark.title %></dd>
   <br />
   <dt>Tag</dt>
-  <dd><%= tags_html(@bookmark.tags) %></dd>
+  <dd><%= tags_html(@bookmark.tag_names) %></dd>
   <br />
   <dt>Notes</dt>
   <dd><%= notes_html(@bookmark.notes) %></dd>

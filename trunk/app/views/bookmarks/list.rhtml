@@ -1,13 +1,13 @@
 <dl class="bookmarks">
 <% for bookmark in @bookmarks -%>
 <dt class="bookmark">
-  <a href="<%= bookmark.url %>"><%=h bookmark.title %></a><br />
+  <%= link_to(h(bookmark.title), bookmark.url) %><br />
   <dd>
   <%= hatena_bookmark_hot_entry_link(bookmark.url) %> |
  <%= hatena_bookmark_entry_link(bookmark.url) %> |
  <%= delicious_history_link(bookmark.url) %> |
- <%= link_to '[E]', :action => 'edit', :id => bookmark -%>
- <%= link_to '[D]', { :action => 'destroy', :id => bookmark }, :confirm => 'Are you sure?' %>
+ <%= link_to('[E]', :action => 'edit', :id => bookmark) -%>
+ <%= link_to('[D]', { :action => 'destroy', :id => bookmark }, :confirm => 'Are you sure?') %>
   </dd>
   <%- if bookmark.tags_count > 0 -%>
   <dd><%= tags_html(bookmark.tag_names) %></dd>
@@ -19,8 +19,8 @@
 </dt>
 <% end -%>
 </dl>
-<%= link_to 'Previous page', { :page => @bookmark_pages.current.previous } if @bookmark_pages.current.previous %> | 
-<%= link_to 'Next page',     { :page => @bookmark_pages.current.next     } if @bookmark_pages.current.next    -%>
+<%= link_to('Previous page', :tags => escape_url(params[:tags]), :page => @bookmark_pages.current.previous) if @bookmark_pages.current.previous %> | 
+<%= link_to('Next page',     :tags => escape_url(params[:tags]), :page => @bookmark_pages.current.next    ) if @bookmark_pages.current.next    -%>
 <br />
-<%= link_to 'New bookmark', :action => 'new' %><br />
-<%= link_to 'Configuration', :action => 'config' %>
+<%= link_to('New bookmark',  :action => 'new') %><br />
+<%= link_to('Configuration', :action => 'config') %>

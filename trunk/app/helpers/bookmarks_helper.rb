@@ -1,4 +1,8 @@
 module BookmarksHelper
+  def escape_url(strings)
+    strings ? strings.collect { |s| u(s) } : nil
+  end
+
   # notes
   def notes_html(notes)
     notes ? h(notes).gsub(/\r\n|\n|\r/, "<br />\n") : ''
@@ -6,7 +10,7 @@ module BookmarksHelper
 
   # tags
   def tags_html(tag_names)
-    ue_params_tags = params[:tags] ? params[:tags].collect { |t| u(t) } : nil
+    ue_params_tags = escape_url(params[:tags])
     tag_names.collect! do |tag|
       if ue_params_tags
         if params[:tags].include? tag
@@ -24,18 +28,18 @@ module BookmarksHelper
   # ?B hot entry
   def hatena_bookmark_hot_entry_link(url)
     url, domain = HatenaBookmark.entrylist_url_and_domain(url)
-    %|<a href="#{url}" title="?B hot entry">#{domain}</a>|
+    link_to(h(domain), url, :title => '?B hot entry')
   end
 
   # ?B entry
   def hatena_bookmark_entry_link(url)
     entry_url = HatenaBookmark.entry_url(url)
-    %|<a href="#{entry_url}" title="?B entry">?B</a>|
+    link_to('?B', entry_url, :title => '?B entry')
   end
 
   # del.icio.us history
   def delicious_history_link(url)
     history_url = Delicious.history_url(url)
-    %|<a href="#{history_url}" title ="del.icio.us history">del.icio.us</a>|
+    link_to('del.icio.us', history_url, :title => 'del.icio.us history')
   end
 end

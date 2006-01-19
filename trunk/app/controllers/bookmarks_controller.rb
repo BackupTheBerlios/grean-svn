@@ -1,23 +1,17 @@
 class BookmarksController < ApplicationController
   def list
-    set_tags # CGI.unescape params[:tags]
+    unescape_tags # CGI.unescape params[:tags]
 
-   # ************************************ tag filter multi
-
-    conditions = nil
-    joins      = nil
     # tag filter
     if params[:tags]
-      conditions = [(['tags.name = ?'] * params[:tags].length).join(' AND ')] + params[:tags]
-      joins      = 'LEFT JOIN tags_bookmarks ON bookmarks.id = tags_bookmarks.bookmark_id left join tags on tags_bookmarks.tag_id = tags.id'
+      @bookmark_pages = Paginator.new(self, Bookmark.find_tagged_with(:all => params[:tags]).length, 3, params[:page])
+      @bookmarks = Bookmark.find_tagged_with(:all    => params[:tags],
+                                             :order  => ["bookmarks.created_at DESC, bookmarks.id DESC"],
+                                             :offset => @bookmark_pages.current.to_sql[1],
+                                             :limit  => @bookmark_pages.current.to_sql[0])
+    else
+      @bookmark_pages, @bookmarks = paginate(:bookmarks, :per_page => 3, :order_by => 'created_at DESC, id DESC')
     end
-
-    @bookmark_pages, @bookmarks =
-      paginate :bookmarks,
-               :per_page => 3,
-               :order_by => 'bookmarks.created_at DESC, bookmarks.id DESC',
-               :conditions => conditions,
-               :joins      => joins
   end
 
   def show
@@ -81,7 +75,7 @@ class BookmarksController < ApplicationController
   end
 
   protected
-  def set_tags
+  def unescape_tags
     if params[:tags].nil? || params[:tags].length == 0
       params[:tags] = nil
     else
