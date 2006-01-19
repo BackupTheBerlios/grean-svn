@@ -1,16 +1,27 @@
 class BookmarksController < ApplicationController
+  before_filter :set_params_search
+
   def list
     unescape_tags # CGI.unescape params[:tags]
 
+    per_page = 3
+    order    = 'bookmarks.created_at DESC, bookmarks.id DESC'
+    # search case-insensitive
+    conditions = params[:search] ? ['(UPPER(bookmarks.title) LIKE UPPER(?) OR UPPER(bookmarks.notes) LIKE UPPER(?))']+["%#{params[:search]}%"]*2 : nil
+
     # tag filter
     if params[:tags]
-      @bookmark_pages = Paginator.new(self, Bookmark.find_tagged_with(:all => params[:tags]).length, 3, params[:page])
-      @bookmarks = Bookmark.find_tagged_with(:all    => params[:tags],
-                                             :order  => ["bookmarks.created_at DESC, bookmarks.id DESC"],
-                                             :offset => @bookmark_pages.current.to_sql[1],
-                                             :limit  => @bookmark_pages.current.to_sql[0])
+      @bookmark_count = Bookmark.find_tagged_with(:all => params[:tags], :conditions => conditions).length
+      @bookmark_pages = Paginator.new(self, @bookmark_count, per_page, params[:page])
+      @bookmarks = Bookmark.find_tagged_with(:all        => params[:tags],
+                                             :order      => order,
+                                             :offset     => @bookmark_pages.current.to_sql[1],
+                                             :limit      => @bookmark_pages.current.to_sql[0],
+                                             :conditions => conditions)
+    # not tag filter
     else
-      @bookmark_pages, @bookmarks = paginate(:bookmarks, :per_page => 3, :order_by => 'created_at DESC, id DESC')
+      @bookmark_count = Bookmark.count(conditions)
+      @bookmark_pages, @bookmarks = paginate(:bookmarks, :per_page => per_page, :order => order, :conditions => conditions)
     end
   end
 
@@ -81,5 +92,14 @@ class BookmarksController < ApplicationController
     else
       params[:tags].collect! { |t| CGI.unescape(t) }
     end
+  end
+
+  # params[:search] strip
+  def set_params_search
+    if params[:search]
+      params[:search].strip!
+      return if params[:search].length > 0
+    end
+    params[:search] = nil
   end
 end

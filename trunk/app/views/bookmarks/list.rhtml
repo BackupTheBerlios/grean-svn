@@ -1,7 +1,27 @@
+<!-- Search form -->
+<%= start_form_tag({ :action => 'list', :tags => escape_url(params[:tags]) }, :method => 'get') %>
+  <%= text_field_tag(:search, params[:search]) %>
+  <%= submit_tag('Search', :name => nil) %>
+  <%- if params[:search] -%>
+  | <%= link_to('Clear', :action => 'list', :tags => escape_url(params[:tags]), :search => nil) %>
+  <%- end -%>
+<%= end_form_tag %>
+
+<!-- Tag filter -->
+<% if params[:tags] -%>
+<p>
+Tag: <%= tag_filter_remove_links(params[:tags]) -%> | 
+<%= link_to('Clear', :action => 'list', :tags => nil, :search => params[:search]) %>
+</p>
+<% end -%>
+
+<!-- Bookmarks -->
+<p><%= @bookmark_count %> bookmarks <%= params[:page] || '1' %>/<%= @bookmark_pages.page_count %></p>
 <dl class="bookmarks">
 <% for bookmark in @bookmarks -%>
 <dt class="bookmark">
-  <%= link_to(h(bookmark.title), bookmark.url) %><br />
+  <%- bookmark_title = highlight(h(bookmark.title), params[:search]) -%>
+  <%= link_to(bookmark_title, bookmark.url) %><br />
   <dd>
   <%= hatena_bookmark_hot_entry_link(bookmark.url) %> |
  <%= hatena_bookmark_entry_link(bookmark.url) %> |
@@ -10,7 +30,7 @@
  <%= link_to('[D]', { :action => 'destroy', :id => bookmark }, :confirm => 'Are you sure?') %>
   </dd>
   <%- if bookmark.tags_count > 0 -%>
-  <dd><%= tags_html(bookmark.tag_names) %></dd>
+  <dd><%= tag_filter_add_links(bookmark.tag_names) %></dd>
   <%- end -%>
   <%- if bookmark.notes -%>
   <dd><%= notes_html(bookmark.notes) %></dd>
@@ -19,8 +39,11 @@
 </dt>
 <% end -%>
 </dl>
-<%= link_to('Previous page', :tags => escape_url(params[:tags]), :page => @bookmark_pages.current.previous) if @bookmark_pages.current.previous %> | 
-<%= link_to('Next page',     :tags => escape_url(params[:tags]), :page => @bookmark_pages.current.next    ) if @bookmark_pages.current.next    -%>
+
+<%= link_to('Previous page', :tags => escape_url(params[:tags]), :search => params[:search], :page => @bookmark_pages.current.previous) if @bookmark_pages.current.previous %> | 
+<%= link_to('Next page',     :tags => escape_url(params[:tags]), :search => params[:search], :page => @bookmark_pages.current.next    ) if @bookmark_pages.current.next    -%>
+<br />
+<hr />
 <br />
 <%= link_to('New bookmark',  :action => 'new') %><br />
 <%= link_to('Configuration', :action => 'config') %>

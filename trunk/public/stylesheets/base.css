@@ -9,3 +9,8 @@ input {
 img {
   border-style: none;
 }
+
+/* highlight() #=> <strong class="highlight">XXX</strong> */
+.highlight {
+  background-color: lightgray;
+}

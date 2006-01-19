@@ -2,7 +2,7 @@
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml" xml:lang="ja" lang="ja">
 <head>
-  <title>Bookmarks: <%= controller.action_name %></title>
+  <title><%= html_title %></title>
   <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
   <%= stylesheet_link_tag 'scaffold' %>
   <%= stylesheet_link_tag 'base' %>
@@ -10,9 +10,6 @@
 <body>
 <% if flash[:notice] -%>
 <p style="color: green"><%= flash[:notice] %></p>
-<% end -%>
-<% if params[:tags] -%>
-<p>Tag: <%=h params[:tags].join(' ') %> | <%= link_to 'Clear', :action => 'list', :tags => nil %></p>
 <% end -%>
 <%= @content_for_layout %>
 </body>
