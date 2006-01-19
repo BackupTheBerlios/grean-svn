@@ -15,7 +15,7 @@ Import<br />
 <br />
 <br />
 <hr />
-<%= link_to 'Destroy all bookmarks', :action => 'destroy_all' %><br />
+<%= link_to 'Destroy all bookmarks', { :action => 'destroy_all' }, :confirm => 'Are you sure?' %><br />
 <br />
 <br />
 <%= link_to 'Back', :action => 'list' %><br />
