@@ -45,6 +45,32 @@ if ActiveRecord::Base.connection.adapter_name == 'PostgreSQL'
 
             count || result
           end
+
+          def find_related_tags(tags, options = {})                
+            tag_names = ActiveRecord::Acts::Taggable.split_tag_names(tags, options[:separator])
+            o, o_pk, o_fk, t, t_pk, t_fk, jt = set_locals_for_sql
+
+            sql = "SELECT jt.#{o_fk} AS o_id FROM #{jt} jt, #{t} t 
+                   WHERE jt.#{t_fk} = t.#{t_pk} 
+                   AND (t.name IN ('#{tag_names.uniq.join("', '")}')) 
+                   GROUP BY jt.#{o_fk} 
+                   HAVING COUNT(jt.#{o_fk})=#{tag_names.length}"
+
+            o_ids = connection.select_all(sql).map { |row| row['o_id'] }
+            return options[:raw] ? [] : {} if o_ids.length < 1
+
+            sql = "SELECT t.#{t_pk} AS id, t.name AS name, COUNT(jt.#{o_fk}) AS count FROM #{jt} jt, #{t} t 
+                   WHERE jt.#{o_fk} IN (#{o_ids.join(",")}) 
+                   AND t.#{t_pk} = jt.#{t_fk}
+                   GROUP BY jt.#{t_fk}, t.#{t_pk}, t.name
+                   ORDER BY count DESC"
+            add_limit!(sql, options)
+
+            result = connection.select_all(sql).delete_if { |row| tag_names.include?(row['name']) }
+            count = result.inject({}) { |hsh, row| hsh[row['name']] = row['count'].to_i; hsh } unless options[:raw]
+
+            count || result
+          end
         end
       end
     end
