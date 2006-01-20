@@ -1,11 +1,12 @@
 # Use Unicode Strings
 # http://wiki.rubyonrails.com/rails/pages/HowToUseUnicodeStrings
+# MySQL 4.1 windows + Cygwin Ruby
 login: &login
-  adapter: postgresql
-  encoding: unicode
-  username: postgres
+  adapter: mysql
+  encoding: utf8
+  username: root
   password: 
-  host: localhost
+  host: LOCALHOST
 
 development:
   database: grean_development
@@ -18,3 +19,11 @@ test:
 production:
   database: grean_production
   <<: *login
+
+# PostgreSQL 8.1 windows + Cygwin Ruby
+#login: &login
+#  adapter: postgresql
+#  encoding: unicode
+#  username: postgres
+#  password: 
+#  host: localhost

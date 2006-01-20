@@ -1,6 +1,7 @@
 class InitialScheme < ActiveRecord::Migration
   def self.up
-    create_table :bookmarks do |t|
+    options = ActiveRecord::Base.connection.adapter_name == 'MySQL' ? 'ENGINE=InnoDB DEFAULT CHARSET=utf8' : nil
+    create_table(:bookmarks, :options => options) do |t|
       t.column :url,          :text,     :null => false
       t.column :title,        :text,     :null => false
       t.column :notes,        :text
