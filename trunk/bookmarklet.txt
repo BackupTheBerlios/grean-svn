@@ -1,1 +1,1 @@
-javascript:window.open('http://localhost:3000/bookmarks/new?title='+encodeURIComponent(document.title)+'&url='+encodeURIComponent(location.href), '_blank');undefined;
+javascript:window.open('http://localhost:3000/new?title='+encodeURIComponent(document.title)+'&url='+encodeURIComponent(location.href), '_blank');undefined;

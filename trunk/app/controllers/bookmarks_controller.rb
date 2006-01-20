@@ -32,7 +32,7 @@ class BookmarksController < ApplicationController
   def new
     @bookmark = Bookmark.new
     @bookmark.url   = params[:url]
-    @bookmark.title = params[:title]
+    @bookmark.title = params[:title] || params[:url] if params[:url]
   end
 
   def create
