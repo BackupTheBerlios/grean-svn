@@ -1,3 +1,4 @@
+<div id="bookmarks">
 <!-- Search form -->
 <%= start_form_tag({ :action => 'list', :tags => escape_url(params[:tags]) }, :method => 'get') %>
   <%= text_field_tag(:search, params[:search]) %>
@@ -10,7 +11,7 @@
 <!-- Tag filter -->
 <% if params[:tags] -%>
 <p>
-Tag: <%= tag_filter_remove_links(params[:tags]) -%> | 
+Tag: <%= tag_remove_links(params[:tags]) -%> | 
 <%= link_to('Clear', :action => 'list', :tags => nil, :search => params[:search]) %>
 </p>
 <% end -%>
@@ -30,7 +31,7 @@ Tag: <%= tag_filter_remove_links(params[:tags]) -%> |
  <%= link_to('[D]', { :action => 'destroy', :id => bookmark }, :confirm => 'Are you sure?') %>
   </dd>
   <%- if bookmark.tags_count > 0 -%>
-  <dd><%= tag_filter_add_links(bookmark.tag_names) %></dd>
+  <dd><%= tag_links(bookmark.tag_names) %></dd>
   <%- end -%>
   <%- if bookmark.notes -%>
   <dd><%= notes_html(bookmark.notes) %></dd>
@@ -40,10 +41,36 @@ Tag: <%= tag_filter_remove_links(params[:tags]) -%> |
 <% end -%>
 </dl>
 
-<%= link_to('Previous page', :tags => escape_url(params[:tags]), :search => params[:search], :page => @bookmark_pages.current.previous) if @bookmark_pages.current.previous %> | 
-<%= link_to('Next page',     :tags => escape_url(params[:tags]), :search => params[:search], :page => @bookmark_pages.current.next    ) if @bookmark_pages.current.next    -%>
+<%= link_to('Prev',  :tags => escape_url(params[:tags]), :search => params[:search], :page => @bookmark_pages.current.previous) if @bookmark_pages.current.previous %> | 
+<%= link_to('Next', :tags => escape_url(params[:tags]), :search => params[:search], :page => @bookmark_pages.current.next    ) if @bookmark_pages.current.next    -%>
 <br />
 <hr />
 <br />
 <%= link_to('New bookmark',  :action => 'new') %><br />
 <%= link_to('Configuration', :action => 'config') %>
+</div>
+
+<br />
+<br />
+
+<!-- Tags -->
+<div id="tags">
+<% if params[:tags] -%>
+Related tags
+<% else -%>
+Tag list
+<% end -%>
+<ul>
+<% tags = nil
+   if params[:tags]
+     tags = Bookmark.find_related_tags(params[:tags], :raw => true, :order => 'count DESC, name ASC')
+   else
+     tags = Bookmark.tags_count(:raw => true, :order => 'count DESC, name ASC')
+   end
+   max_length = tags[0]['count'].to_s.length
+   for tag in tags
+-%>
+<li><%= h(sprintf("%#{max_length}d", tag['count'])).gsub(' ', '&nbsp;') %> <%= tag_link(tag['name']) %></li>
+<% end -%>
+</ul>
+</div>

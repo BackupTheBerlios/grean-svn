@@ -58,3 +58,4 @@ end
 
 # Include your application configuration below
 require_gem 'acts_as_taggable'
+require 'acts_as_taggable_patch' # A patch that work on PostgreSQL

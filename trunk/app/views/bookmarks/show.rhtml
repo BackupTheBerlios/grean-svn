@@ -8,7 +8,7 @@ Show bookmark<br />
   <dd><%=h @bookmark.title %></dd>
   <br />
   <dt>Tag</dt>
-  <dd><%= tag_filter_add_links(@bookmark.tag_names) %></dd>
+  <dd><%= tag_links(@bookmark.tag_names) %></dd>
   <br />
   <dt>Notes</dt>
   <dd><%= notes_html(@bookmark.notes) %></dd>

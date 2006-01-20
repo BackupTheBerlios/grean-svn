@@ -29,33 +29,31 @@ module BookmarksHelper
     end
   end
 
-  # tags
-  def tag_filter_add_links(tag_names)
-    if controller.action_name == 'list' && params[:tags]
-      ue_params_tags = escape_url(params[:tags]) # Tag filter
-      add_links = tag_names.collect do |tag|
-        if params[:tags].include? tag
-          h(tag)
-        else
-          link_to(h(tag), { :action => 'list', :tags => ue_params_tags+[u(tag)], :search => params[:search] }, :title => 'Add Tag filter')
-        end
-      end
-      add_links.join(' ')
+  # tag add
+  def add_tag(tag_name)
+    ((params[:tags] || []) + [tag_name]).uniq
+  end
+  # <a href="">tag1</a>
+  def tag_link(tag_name)
+    if params[:tags] && params[:tags].include?(tag_name)
+      h(tag_name)
     else
-      add_links = tag_names.collect do |tag|
-        link_to(h(tag), :action => 'list', :tags => u(tag), :search => params[:search])
-      end
-      add_links.join(' ')
+      link_to(h(tag_name), { :action => 'list', :tags => escape_url(add_tag(tag_name)), :search => params[:search] })
     end
   end
-  def tag_filter_remove_links(tag_names)
-    ue_params_tags = escape_url(params[:tags]) # Tag filter
-    remove_links = tag_names.collect do |tag|
-      removed_tags = ue_params_tags - [u(tag)]
+  # <a href="">tag1</a> <a href="">tag2</a> ...
+  def tag_links(tag_names, separator = ' ')
+    tag_names.collect { |tag_name| tag_link(tag_name) }.join(separator)
+  end
+  # tag remove
+  # <a href="">tag1</a> <a href="">tag2</a> ...
+  def tag_remove_links(tag_names, separator = ' ')
+    links = tag_names.collect do |tag_name|
+      removed_tags = params[:tags] - [tag_name]
       removed_tags = nil if removed_tags.length == 0
-      link_to(h(tag), { :action => 'list', :tags => removed_tags, :search => params[:search] }, :title => 'Remove Tag filter')
+      link_to(h(tag_name), { :action => 'list', :tags => escape_url(removed_tags), :search => params[:search] })
     end
-    remove_links.join(' ')
+    links.join(separator)
   end
 
   # ?B hot entry
