@@ -46,6 +46,26 @@ if ActiveRecord::Base.connection.adapter_name == 'PostgreSQL'
             count || result
           end
 
+          def find_related_tagged(related, options = {})
+            related_id = related.is_a?(self) ? related.id : related
+            options = { :limit => 5 }.merge(options)
+
+            o, o_pk, o_fk, t, t_pk, t_fk, jt = set_locals_for_sql
+            sql = "SELECT #{o}.*, c.count AS count FROM #{o}, 
+                    (SELECT #{o_fk}, COUNT(#{o_fk}) AS count FROM #{jt} 
+                     WHERE #{o_fk} != #{related_id} 
+                      AND #{t_fk} IN (SELECT #{t_fk} FROM #{jt} WHERE #{o_fk} = #{related_id}) 
+                     GROUP BY #{o_fk} 
+                     ORDER BY count DESC 
+                     LIMIT 5
+                    ) AS c 
+                    WHERE #{o}.id = c.#{o_fk} 
+                    ORDER BY c.count DESC"
+            add_limit!(sql, options)
+
+            find_by_sql(sql)
+          end
+
           def find_related_tags(tags, options = {})                
             tag_names = ActiveRecord::Acts::Taggable.split_tag_names(tags, options[:separator])
             o, o_pk, o_fk, t, t_pk, t_fk, jt = set_locals_for_sql
