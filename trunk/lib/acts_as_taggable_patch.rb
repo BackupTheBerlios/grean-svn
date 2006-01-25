@@ -56,8 +56,6 @@ if ActiveRecord::Base.connection.adapter_name == 'PostgreSQL'
                      WHERE #{o_fk} != #{related_id} 
                       AND #{t_fk} IN (SELECT #{t_fk} FROM #{jt} WHERE #{o_fk} = #{related_id}) 
                      GROUP BY #{o_fk} 
-                     ORDER BY count DESC 
-                     LIMIT 5
                     ) AS c 
                     WHERE #{o}.id = c.#{o_fk} 
                     ORDER BY c.count DESC"
