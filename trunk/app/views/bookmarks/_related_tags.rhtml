@@ -1,0 +1,10 @@
+<div id="related_tags">
+<%=h @related_tags_title %>
+<ul>
+<% max_length = @related_tags[0]['count'].to_s.length
+   for tag in @related_tags
+-%>
+<li><%= h(sprintf("%#{max_length}d", tag['count'])).gsub(' ', '&nbsp;') %> <%= tag_link(tag['name']) %></li>
+<% end -%>
+</ul>
+</div>

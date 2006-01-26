@@ -56,6 +56,19 @@ module BookmarksHelper
     links.join(separator)
   end
 
+  def related_tags
+    @related_tags_title = nil
+    @related_tags       = nil
+    if params[:tags]
+      @related_tags_title = 'Related tags'
+      @related_tags = Bookmark.find_related_tags(params[:tags], :raw => true, :order => 'count DESC, name ASC')
+    else
+      @related_tags_title = 'Tag list'
+      @related_tags = Bookmark.tags_count(:raw => true, :order => 'count DESC, name ASC')
+    end
+    render :partial => 'related_tags'
+  end
+
   # ?B hot entry
   def hatena_bookmark_hot_entry_link(url)
     url, domain = HatenaBookmark.entrylist_url_and_domain(url)

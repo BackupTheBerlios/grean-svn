@@ -53,24 +53,4 @@ Tag: <%= tag_remove_links(params[:tags]) -%> |
 <br />
 <br />
 
-<!-- Tags -->
-<div id="tags">
-<% if params[:tags] -%>
-Related tags
-<% else -%>
-Tag list
-<% end -%>
-<ul>
-<% tags = nil
-   if params[:tags]
-     tags = Bookmark.find_related_tags(params[:tags], :raw => true, :order => 'count DESC, name ASC')
-   else
-     tags = Bookmark.tags_count(:raw => true, :order => 'count DESC, name ASC')
-   end
-   max_length = tags[0]['count'].to_s.length
-   for tag in tags
--%>
-<li><%= h(sprintf("%#{max_length}d", tag['count'])).gsub(' ', '&nbsp;') %> <%= tag_link(tag['name']) %></li>
-<% end -%>
-</ul>
-</div>
+<%= related_tags %>
